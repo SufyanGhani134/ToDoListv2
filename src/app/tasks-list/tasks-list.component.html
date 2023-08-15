@@ -1,0 +1,35 @@
+<div class="listContainer p-5 rounded">
+    <h2>Heading</h2>
+    <ul class="list-group list-group-horizontal-xxl">
+        <li class="list-group-item list-group-item-primary m-1" *ngFor="let activeTaskObj of tasksArray">
+            <div class="d-flex align-items-center">
+                <div class="chevron"><i class="bi bi-chevron-right"></i></div>
+                <span class="fs-4">
+                    {{ activeTaskObj.date}}
+                </span>
+            </div>
+            <div>
+                <ul class="list-group list-group-horizontal-xxl" dragula="VAMPIRES"
+                    [(dragulaModel)]="activeTaskObj.children">
+                    <li class="list-group-item list-group-item-info m-1"
+                        *ngFor="let task of activeTaskObj.children; let i = index">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="chevron"><i class="bi bi-chevron-right"></i></div>
+                                <span class="fs-5">{{task.title}}</span>
+                            </div>
+                            <input type="checkbox" value="" (change)="CheckedTask(task,i)">
+                        </div>
+
+                        <div class="fs-6 bg-light bg-gradient ms-5">
+                            <p>Details:
+                                <span class="ps-3">{{task.detail}}</span>
+                            </p>
+                        </div>
+                        <button type="button" class="btn btn-outline-secondary btn-sm float-end">Update</button>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>

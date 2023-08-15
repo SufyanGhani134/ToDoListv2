@@ -1,0 +1,19 @@
+<div class="container p-5 border border-primary rounded w-50 bg-light bg-gradient">
+    <form [formGroup]="taskForm" (ngSubmit)="AddTask()">
+        <div class="mb-3">
+            <label for="taskTitle" class="form-label">Title</label>
+            <input type="text" class="form-control" placeholder="Title" formControlName="title">
+        </div>
+        <div class="mb-3">
+            <label for="taskDetail" class="form-label">Details</label>
+            <textarea type="text" class="form-control" placeholder="Details" formControlName="detail"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="taskDate" class="form-label">Schedule Date</label>
+            <input type="date" class="form-control" placeholder="DD/MM/YYYY" formControlName="date">
+        </div>
+        <div class="mb-3">
+            <button class="btn btn-primary" type="submit">Add Task</button>
+        </div>
+    </form>
+</div>
