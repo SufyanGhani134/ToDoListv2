@@ -2,8 +2,8 @@
 <div class="w-100 d-flex justify-content-center">
   <app-tasks-list class="taskListContainer" 
   [tasksArray]="ActiveTasks" 
-  (completedTask)="completedTask($event)"
   (indexEmitter)="getIndex($event)"
+  (completedTask)="completedTask($event)"
   >
 
   </app-tasks-list>

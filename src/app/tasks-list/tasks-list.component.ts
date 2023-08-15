@@ -16,10 +16,11 @@ export class TasksListComponent {
 
   @Output()
   indexEmitter: EventEmitter<number>=new EventEmitter<number>
+
   CheckedTask(task: Task, index: number){
     console.log(index, "index======");
-    this.completedTask.emit(task);
     this.indexEmitter.emit(index);
+    this.completedTask.emit(task);
   }
   // [
   //    {

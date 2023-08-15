@@ -47,7 +47,6 @@ export class AppComponent {
 
   getIndex(index: number){
     this.SelectedIndex = index;
-    console.log(this.SelectedIndex, "index------");
   }
 
 
@@ -74,6 +73,7 @@ export class AppComponent {
   }
 
   RemoveTask(task: Task){
+    console.log(this.SelectedIndex, "index------");
     for (let i = 0; i < this.ActiveTasks.length; i++) {
       if(task.date == this.ActiveTasks[i].date){
         this.ActiveTasks[i].children?.splice(this.SelectedIndex,1)
