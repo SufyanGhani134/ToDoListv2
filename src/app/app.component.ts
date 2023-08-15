@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, DoCheck } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { TasksArray } from './tasks-array';
 import { Task } from './task';
@@ -41,8 +41,6 @@ export class AppComponent {
       };
       this.ActiveTasks.push(newTaskArrayObj);
     }
-
-    console.log(this.ActiveTasks, "ActiveTask")
   }
 
   getIndex(index: number){
@@ -51,11 +49,9 @@ export class AppComponent {
 
 
   completedTask(task: Task){
-    // console.log(this.ActiveTasks, "ActiveTask")
     const matchingTask = this.completedTasksArray.find(
       (element) => element.date === task.date
     );
-      
     if (matchingTask) {
       matchingTask.children?.push(task);
     } else {
@@ -66,8 +62,6 @@ export class AppComponent {
       };
       this.completedTasksArray.push(newTaskArrayObj);
     }
-
-    // console.log(this.completedTasksArray, "Completed Task Array")
     this.RemoveTask(task);
 
   }
@@ -81,11 +75,20 @@ export class AppComponent {
         break
       }
     }
-    // this.ActiveTasks.forEach(element => {
-    //   if(task.date == element.date){
-    //     this.ActiveTasks.splice(this.Index, 1);
-        
-    //   }
-    // });
+  }
+
+  updateTask(task: Task){
+    debugger;
+    for (let i = 0; i < this.ActiveTasks.length; i++) {
+      if(task.date == this.ActiveTasks[i].date){
+        this.ActiveTasks[i].children?.forEach((element,index)=>{
+          if(this.SelectedIndex == index){
+            element.title = task.title;
+            element.detail = task.detail;
+          }
+        })
+      }
+    }
+
   }
 }

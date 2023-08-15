@@ -1,35 +1,91 @@
-<div class="listContainer p-5 rounded">
-    <h2>Heading</h2>
-    <ul class="list-group list-group-horizontal-xxl">
-        <li class="list-group-item list-group-item-primary m-1" *ngFor="let activeTaskObj of tasksArray">
-            <div class="d-flex align-items-center">
-                <div class="chevron"><i class="bi bi-chevron-right"></i></div>
-                <span class="fs-4">
-                    {{ activeTaskObj.date}}
-                </span>
+<div class="listContainer p-5 rounded" *ngIf="tasksArray?.length != 0">
+  <ng-content></ng-content>
+  <ul class="list-group list-group-horizontal-xxl w-100 flex-column" dragula="ZOMBIES"
+  [(dragulaModel)]="tasksArray">
+    <li
+      class="list-group-item list-group-item-primary m-1 w-100"
+      *ngFor="let activeTaskObj of tasksArray"
+    >
+      <div class="d-flex align-items-center">
+        <div
+          class="chevron"
+          (click)="activeTaskObj.display = !activeTaskObj.display"
+        >
+          <i class="bi bi-chevron-right"></i>
+        </div>
+        <span class="fs-4">
+          {{ activeTaskObj.date }}
+        </span>
+      </div>
+      <div>
+        <ul
+          class="list-group list-group-horizontal-xxl w-100 flex-column"
+          dragula="VAMPIRES"
+          [(dragulaModel)]="activeTaskObj.children"
+          *ngIf="activeTaskObj.display"
+        >
+          <li
+            class="list-group-item list-group-item-info m-1 w-100"
+            *ngFor="let task of activeTaskObj.children; let i = index"
+          >
+            <div class="d-flex justify-content-between">
+              <div class="d-flex align-items-center">
+                <div class="chevron" (click)="task.display = !task.display">
+                  <i class="bi bi-chevron-right"></i>
+                </div>
+                <span class="fs-5" *ngIf="!inputDisplay; else titleInput">{{
+                  task.title
+                }}</span>
+                <ng-template #titleInput>
+                  <input  class="border-0 rounded" type="text" [value]="task.title" (input)="updateTitle($event)">
+                </ng-template>
+              </div>
+              <input type="checkbox" value="" (change)="CheckedTask(task, i)" [checked]="task.status" *ngIf="!task.status"/>
             </div>
-            <div>
-                <ul class="list-group list-group-horizontal-xxl" dragula="VAMPIRES"
-                    [(dragulaModel)]="activeTaskObj.children">
-                    <li class="list-group-item list-group-item-info m-1"
-                        *ngFor="let task of activeTaskObj.children; let i = index">
-                        <div class="d-flex justify-content-between">
-                            <div class="d-flex align-items-center">
-                                <div class="chevron"><i class="bi bi-chevron-right"></i></div>
-                                <span class="fs-5">{{task.title}}</span>
-                            </div>
-                            <input type="checkbox" value="" (change)="CheckedTask(task,i)">
-                        </div>
-
-                        <div class="fs-6 bg-light bg-gradient ms-5">
-                            <p>Details:
-                                <span class="ps-3">{{task.detail}}</span>
-                            </p>
-                        </div>
-                        <button type="button" class="btn btn-outline-secondary btn-sm float-end">Update</button>
-                    </li>
-                </ul>
+            <div *ngIf="task.display">
+              <div class="fs-6 ms-5 d-flex align-items-center">
+                Details:
+                <span
+                  class="ps-3 bg-light bg-gradient mx-2"
+                  *ngIf="!inputDisplay; else detailInput"
+                  >{{ task.detail }}
+                </span>                
+                <ng-template #detailInput>
+                  <textarea  class="border-0 rounded mx-2" (input)="updateDetail($event)">{{ task.detail }}</textarea>
+                </ng-template>
+              </div>
+              <div *ngIf="!task.status">
+                <div *ngIf="!editBtnDisplay">
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary btn-sm float-end"
+                      (click)="inputDisplay = true ; editBtnDisplay = true"
+                    >
+                      <i class="bi bi-pen"></i>
+                    </button>
+                  </div>
+    
+                  <div *ngIf="editBtnDisplay">
+                    <button
+                      type="button"
+                      class="btn btn-outline-primary btn-sm float-end"
+                      (click)="updateTask(task,i)"
+                    >
+                      <i class="bi bi-save"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger btn-sm float-end mx-2"
+                      (click)="inputDisplay = false ; editBtnDisplay = false"
+                    >
+                      <i class="bi bi-x-lg"></i>
+                    </button>
+                  </div>
+              </div>
             </div>
-        </li>
-    </ul>
+          </li>
+        </ul>
+      </div>
+    </li>
+  </ul>
 </div>

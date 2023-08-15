@@ -1,11 +1,15 @@
 <app-task-form (SendNewTask)="AddNewTask($event)"></app-task-form>
 <div class="w-100 d-flex justify-content-center">
-  <app-tasks-list class="taskListContainer" 
-  [tasksArray]="ActiveTasks" 
-  (indexEmitter)="getIndex($event)"
-  (completedTask)="completedTask($event)"
+  <app-tasks-list
+    class="taskListContainer"
+    [tasksArray]="ActiveTasks"
+    (indexEmitter)="getIndex($event)"
+    (completedTask)="completedTask($event)"
+    (updatedTaskEmitter)="updateTask($event)"
   >
-
+    <h2>Active Tasks</h2>
   </app-tasks-list>
-  <app-tasks-list class="taskListContainer" [tasksArray]="completedTasksArray" ></app-tasks-list>
+  <app-tasks-list class="taskListContainer" [tasksArray]="completedTasksArray">
+    <h2>Completed Tasks</h2>
+  </app-tasks-list>
 </div>
