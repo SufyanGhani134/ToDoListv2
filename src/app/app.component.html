@@ -1,15 +1,28 @@
 <app-task-form (SendNewTask)="AddNewTask($event)"></app-task-form>
 <div class="w-100 d-flex justify-content-center">
   <app-tasks-list
-    class="taskListContainer"
+    class="taskListContainer bg-danger"
     [tasksArray]="ActiveTasks"
     (indexEmitter)="getIndex($event)"
     (completedTask)="completedTask($event)"
     (updatedTaskEmitter)="updateTask($event)"
+    cdkDropList
+    [cdkDropListData]="ActiveTasks"
+    (cdkDropListDropped)="dropTasksArray($event)"
+    [cdkDropListConnectedTo]="completedContainer"
+    #activeContainer="cdkDropList"
   >
     <h2>Active Tasks</h2>
   </app-tasks-list>
-  <app-tasks-list class="taskListContainer" [tasksArray]="completedTasksArray">
+  <app-tasks-list
+    class="taskListContainer bg-success"
+    [tasksArray]="completedTasksArray"
+    #completedContainer="cdkDropList"
+    cdkDropList
+    [cdkDropListData]="completedTasksArray"
+    (cdkDropListDropped)="dropTasksArray($event)"
+    [cdkDropListConnectedTo]="activeContainer"
+  >
     <h2>Completed Tasks</h2>
   </app-tasks-list>
 </div>

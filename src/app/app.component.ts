@@ -2,6 +2,7 @@ import { Component, DoCheck } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { TasksArray } from './tasks-array';
 import { Task } from './task';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-root',
@@ -86,6 +87,19 @@ export class AppComponent {
           }
         });
       }
+    }
+  }
+
+  dropTasksArray(event: any){
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
     }
   }
 }

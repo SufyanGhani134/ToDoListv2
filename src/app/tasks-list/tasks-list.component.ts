@@ -1,3 +1,4 @@
+import { Task } from './../task';
 import {
   Component,
   DoCheck,
@@ -7,7 +8,9 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { Task } from '../task';
+import { CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import { TasksArray } from '../tasks-array';
+
 
 @Component({
   selector: 'app-tasks-list',
@@ -36,6 +39,7 @@ export class TasksListComponent implements DoCheck {
   @Output()
   updatedTaskEmitter: EventEmitter<Task> = new EventEmitter<Task>();
 
+
   CheckedTask(task: Task, index: number) {
     this.indexEmitter.emit(index);
     task.status = !task.status;
@@ -62,5 +66,13 @@ export class TasksListComponent implements DoCheck {
         this.tasksArray?.splice(i, 1);
       }
     });
+  }
+
+  dropTaskArray(event:  CdkDragDrop<TasksArray[]>){
+    moveItemInArray(this.tasksArray!, event.currentIndex, event.previousIndex);
+  }
+
+  dropTask(event: CdkDragDrop<Task[]>,task: Task[]){
+    moveItemInArray(task, event.previousIndex, event.currentIndex);
   }
 }

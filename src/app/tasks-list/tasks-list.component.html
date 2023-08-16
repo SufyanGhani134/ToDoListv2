@@ -1,13 +1,10 @@
 <div class="listContainer p-5 rounded">
   <ng-content></ng-content>
-  <ul
-    class="list-group list-group-horizontal-xxl w-100 flex-column"
-    dragula="ZOMBIES"
-    [(dragulaModel)]="tasksArray"
-  >
+  <ul class="list-group list-group-horizontal-xxl w-100 flex-column" cdkDrag cdkDropList (cdkDropListDropped)="dropTaskArray($event)">
     <li
       class="list-group-item list-group-item-primary m-1 w-100"
       *ngFor="let activeTaskObj of tasksArray"
+      cdkDrag
     >
       <div class="d-flex align-items-center">
         <div
@@ -24,12 +21,13 @@
         <ul
           class="list-group list-group-horizontal-xxl w-100 flex-column"
           dragula="VAMPIRES"
-          [(dragulaModel)]="activeTaskObj.children"
           *ngIf="activeTaskObj.display"
+          cdkDropList (cdkDropListDropped)="dropTask($event, activeTaskObj.children)"
         >
           <li
             class="list-group-item list-group-item-info m-1 w-100"
             *ngFor="let task of activeTaskObj.children; let i = index"
+            cdkDrag
           >
             <div class="d-flex justify-content-between">
               <div class="d-flex align-items-center">
