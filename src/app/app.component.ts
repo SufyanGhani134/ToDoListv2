@@ -6,7 +6,7 @@ import { Task } from './task';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   title = 'ToDoList';
@@ -15,10 +15,11 @@ export class AppComponent {
   completedTasksArray: TasksArray[] = [];
   SelectedIndex: number = 0;
 
-
   AddNewTask(TaskForm: FormGroup) {
     const newTask: Task = {
       display: false,
+      inputDisplay: false,
+      editBtnDisplay: false,
       title: '',
       detail: '',
       date: new Date(),
@@ -43,12 +44,11 @@ export class AppComponent {
     }
   }
 
-  getIndex(index: number){
+  getIndex(index: number) {
     this.SelectedIndex = index;
   }
 
-
-  completedTask(task: Task){
+  completedTask(task: Task) {
     const matchingTask = this.completedTasksArray.find(
       (element) => element.date === task.date
     );
@@ -63,32 +63,29 @@ export class AppComponent {
       this.completedTasksArray.push(newTaskArrayObj);
     }
     this.RemoveTask(task);
-
   }
 
-  RemoveTask(task: Task){
-    console.log(this.SelectedIndex, "index------");
+  RemoveTask(task: Task) {
+    console.log(this.SelectedIndex, 'index------');
     for (let i = 0; i < this.ActiveTasks.length; i++) {
-      if(task.date == this.ActiveTasks[i].date){
-        this.ActiveTasks[i].children?.splice(this.SelectedIndex,1)
-        console.log(this.ActiveTasks[i].children, "rempved")
-        break
+      if (task.date == this.ActiveTasks[i].date) {
+        this.ActiveTasks[i].children?.splice(this.SelectedIndex, 1);
+        console.log(this.ActiveTasks[i].children, 'rempved');
+        break;
       }
     }
   }
 
-  updateTask(task: Task){
-    debugger;
+  updateTask(task: Task) {
     for (let i = 0; i < this.ActiveTasks.length; i++) {
-      if(task.date == this.ActiveTasks[i].date){
-        this.ActiveTasks[i].children?.forEach((element,index)=>{
-          if(this.SelectedIndex == index){
+      if (task.date == this.ActiveTasks[i].date) {
+        this.ActiveTasks[i].children?.forEach((element, index) => {
+          if (this.SelectedIndex == index) {
             element.title = task.title;
             element.detail = task.detail;
           }
-        })
+        });
       }
     }
-
   }
 }

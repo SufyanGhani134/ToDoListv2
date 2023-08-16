@@ -1,7 +1,10 @@
-<div class="listContainer p-5 rounded" *ngIf="tasksArray?.length != 0">
+<div class="listContainer p-5 rounded">
   <ng-content></ng-content>
-  <ul class="list-group list-group-horizontal-xxl w-100 flex-column" dragula="ZOMBIES"
-  [(dragulaModel)]="tasksArray">
+  <ul
+    class="list-group list-group-horizontal-xxl w-100 flex-column"
+    dragula="ZOMBIES"
+    [(dragulaModel)]="tasksArray"
+  >
     <li
       class="list-group-item list-group-item-primary m-1 w-100"
       *ngFor="let activeTaskObj of tasksArray"
@@ -33,54 +36,78 @@
                 <div class="chevron" (click)="task.display = !task.display">
                   <i class="bi bi-chevron-right"></i>
                 </div>
-                <span class="fs-5" *ngIf="!inputDisplay; else titleInput">{{
-                  task.title
-                }}</span>
+                <span
+                  class="fs-5"
+                  *ngIf="!task.inputDisplay; else titleInput"
+                  >{{ task.title }}</span
+                >
                 <ng-template #titleInput>
-                  <input  class="border-0 rounded" type="text" [value]="task.title" (input)="updateTitle($event)">
+                  <input
+                    class="border-0 rounded"
+                    autofocus
+                    type="text"
+                    [value]="task.title"
+                    #updatedTitle
+                  />
                 </ng-template>
               </div>
-              <input type="checkbox" value="" (change)="CheckedTask(task, i)" [checked]="task.status" *ngIf="!task.status"/>
+              <input
+                type="checkbox"
+                value=""
+                (change)="CheckedTask(task, i)"
+                [checked]="task.status"
+                *ngIf="!task.status"
+              />
             </div>
             <div *ngIf="task.display">
               <div class="fs-6 ms-5 d-flex align-items-center">
                 Details:
                 <span
                   class="ps-3 bg-light bg-gradient mx-2"
-                  *ngIf="!inputDisplay; else detailInput"
+                  *ngIf="!task.inputDisplay; else detailInput"
                   >{{ task.detail }}
-                </span>                
+                </span>
                 <ng-template #detailInput>
-                  <textarea  class="border-0 rounded mx-2" (input)="updateDetail($event)">{{ task.detail }}</textarea>
+                  <textarea class="border-0 rounded mx-2" #updatedDetail>{{
+                    task.detail
+                  }}</textarea>
                 </ng-template>
               </div>
               <div *ngIf="!task.status">
-                <div *ngIf="!editBtnDisplay">
-                    <button
-                      type="button"
-                      class="btn btn-outline-secondary btn-sm float-end"
-                      (click)="inputDisplay = true ; editBtnDisplay = true"
-                    >
-                      <i class="bi bi-pen"></i>
-                    </button>
-                  </div>
-    
-                  <div *ngIf="editBtnDisplay">
-                    <button
-                      type="button"
-                      class="btn btn-outline-primary btn-sm float-end"
-                      (click)="updateTask(task,i)"
-                    >
-                      <i class="bi bi-save"></i>
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-outline-danger btn-sm float-end mx-2"
-                      (click)="inputDisplay = false ; editBtnDisplay = false"
-                    >
-                      <i class="bi bi-x-lg"></i>
-                    </button>
-                  </div>
+                <div *ngIf="!task.editBtnDisplay">
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary btn-sm float-end"
+                    (click)="
+                      task.inputDisplay = true; task.editBtnDisplay = true
+                    "
+                  >
+                    <i class="bi bi-pen"></i>
+                  </button>
+                </div>
+
+                <div *ngIf="task.editBtnDisplay">
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary btn-sm float-end"
+                    (click)="
+                      updateTask(task, i);
+                      task.inputDisplay = false;
+                      task.editBtnDisplay = false
+                    "
+                  >
+                    <i class="bi bi-save"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger btn-sm float-end mx-2"
+                    (click)="
+                      task.inputDisplay = false; task.editBtnDisplay = false
+                    "
+                  >
+                    <i class="bi bi-x-lg"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </li>
