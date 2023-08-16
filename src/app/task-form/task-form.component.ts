@@ -11,13 +11,15 @@ export class TaskFormComponent {
   taskForm: FormGroup = new FormGroup({
     title : new FormControl(''),
     detail: new FormControl(''),
-    date: new FormControl('')
+    date: new FormControl(''),
+    time: new FormControl('')
   })
 
   @Output()
   SendNewTask: EventEmitter<FormGroup> = new EventEmitter<FormGroup>();
 
   AddTask(){
+    debugger;
     this.SendNewTask.emit(this.taskForm);
   }
 }

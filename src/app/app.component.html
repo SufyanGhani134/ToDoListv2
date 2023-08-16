@@ -6,22 +6,13 @@
     (indexEmitter)="getIndex($event)"
     (completedTask)="completedTask($event)"
     (updatedTaskEmitter)="updateTask($event)"
-    cdkDropList
-    [cdkDropListData]="ActiveTasks"
-    (cdkDropListDropped)="dropTasksArray($event)"
-    [cdkDropListConnectedTo]="completedContainer"
-    #activeContainer="cdkDropList"
   >
     <h2>Active Tasks</h2>
   </app-tasks-list>
   <app-tasks-list
     class="taskListContainer bg-success"
     [tasksArray]="completedTasksArray"
-    #completedContainer="cdkDropList"
-    cdkDropList
-    [cdkDropListData]="completedTasksArray"
-    (cdkDropListDropped)="dropTasksArray($event)"
-    [cdkDropListConnectedTo]="activeContainer"
+
   >
     <h2>Completed Tasks</h2>
   </app-tasks-list>

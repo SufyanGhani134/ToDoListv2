@@ -43,6 +43,10 @@ export class AppComponent {
       };
       this.ActiveTasks.push(newTaskArrayObj);
     }
+    debugger;
+    setTimeout(() => {
+      this.completedTask(newTask)
+    }, TaskForm.controls['time'].value);
   }
 
   getIndex(index: number) {
