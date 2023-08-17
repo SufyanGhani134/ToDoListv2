@@ -1,3 +1,4 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -7,6 +8,8 @@ import { TaskFormComponent } from './task-form/task-form.component';
 import { TasksListComponent } from './tasks-list/tasks-list.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop'
+import { ToastrModule, provideToastr } from 'ngx-toastr';
+
 
 @NgModule({
   declarations: [
@@ -19,9 +22,18 @@ import { DragDropModule } from '@angular/cdk/drag-drop'
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
-    DragDropModule
+    DragDropModule,
+    ToastrModule.forRoot(),
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    provideToastr({
+      timeOut: 10000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+      progressBar: true
+    }),
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

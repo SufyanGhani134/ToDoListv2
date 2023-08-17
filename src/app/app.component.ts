@@ -3,6 +3,9 @@ import { FormGroup } from '@angular/forms';
 import { TasksArray } from './tasks-array';
 import { Task } from './task';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { ToastrService } from 'ngx-toastr';
+import { ApiServicesService } from './Services/api-services.service';
+import { elementAt } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -10,11 +13,35 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
+  constructor(private toastr: ToastrService, private apiServices: ApiServicesService) {}
+  
+
   title = 'ToDoList';
 
   ActiveTasks: TasksArray[] = [];
   completedTasksArray: TasksArray[] = [];
   SelectedIndex: number = 0;
+  ngOnInit() {
+    this.apiServices.getTasks().subscribe(
+      (response)=>{
+         this.getAllTasks(response) 
+        }
+      )
+  }
+
+  getAllTasks(allTasks: any []){
+    this.ActiveTasks = [];
+    const allDates = allTasks.map(item => item.date)
+    const dates =[...new Set(allDates)];
+    dates.forEach(element => {
+      const newChild = allTasks.filter(item => item.date == element)
+      this.ActiveTasks.push({
+        date: element,
+        children: newChild,
+        display: false
+      })
+    });
+  }
 
   AddNewTask(TaskForm: FormGroup) {
     const newTask: Task = {
@@ -29,24 +56,27 @@ export class AppComponent {
     newTask.title = TaskForm.controls['title'].value;
     newTask.detail = TaskForm.controls['detail'].value;
     newTask.date = TaskForm.controls['date'].value;
-    const matchingTask = this.ActiveTasks.find(
-      (element) => element.date === newTask.date
-    );
 
-    if (matchingTask) {
-      matchingTask.children?.push(newTask);
-    } else {
-      const newTaskArrayObj: TasksArray = {
-        display: false,
-        date: newTask.date,
-        children: [newTask],
-      };
-      this.ActiveTasks.push(newTaskArrayObj);
-    }
-    debugger;
-    setTimeout(() => {
-      this.completedTask(newTask)
-    }, TaskForm.controls['time'].value);
+    this.apiServices.addTask(newTask).subscribe(()=>{console.log('Task has been Added!')})
+    // const matchingTask = this.ActiveTasks.find(
+    //   (element) => element.date === newTask.date
+    // );
+
+    // if (matchingTask) {
+    //   matchingTask.children?.push(newTask);
+    // } else {
+    //   const newTaskArrayObj: TasksArray = {
+    //     display: false,
+    //     date: newTask.date,
+    //     children: [newTask],
+    //   };
+    //   this.ActiveTasks.push(newTaskArrayObj);
+    // }
+    // this.toastr.info('Task has been Added!');
+    // const time = TaskForm.controls['time'].value*60*60*1000
+    // setTimeout(() => {
+    //   this.completedTask(newTask)
+    // }, time);
   }
 
   getIndex(index: number) {
@@ -54,6 +84,11 @@ export class AppComponent {
   }
 
   completedTask(task: Task) {
+    this.apiServices.updateStatus(task.date, this.SelectedIndex+1, task.status).subscribe(
+      ()=>{
+        console.log("update running!!")
+      }
+    )
     const matchingTask = this.completedTasksArray.find(
       (element) => element.date === task.date
     );
@@ -107,3 +142,7 @@ export class AppComponent {
     }
   }
 }
+function getAllTask(reponse: any) {
+  throw new Error('Function not implemented.');
+}
+

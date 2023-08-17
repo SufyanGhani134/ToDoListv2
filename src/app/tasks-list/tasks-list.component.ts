@@ -20,7 +20,7 @@ import { TasksArray } from '../tasks-array';
 export class TasksListComponent implements DoCheck {
   title: string = '';
   detail: any;
-
+  
   @ViewChild('updatedTitle')
   updatedTitle!: ElementRef;
 
@@ -42,7 +42,7 @@ export class TasksListComponent implements DoCheck {
 
   CheckedTask(task: Task, index: number) {
     this.indexEmitter.emit(index);
-    task.status = !task.status;
+    task.status = true;
     this.completedTask.emit(task);
   }
 
