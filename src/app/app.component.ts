@@ -31,13 +31,20 @@ export class AppComponent {
 
   getAllTasks(allTasks: any []){
     this.ActiveTasks = [];
+    this.completedTasksArray = [];
     const allDates = allTasks.map(item => item.date)
     const dates =[...new Set(allDates)];
     dates.forEach(element => {
-      const newChild = allTasks.filter(item => item.date == element)
+      const newActiveChild = allTasks.filter(item => item.date == element && item.status == false)
+      const newCompletedChild = allTasks.filter(item => item.date == element && item.status == true)
       this.ActiveTasks.push({
         date: element,
-        children: newChild,
+        children: newActiveChild,
+        display: false
+      })
+      this.completedTasksArray.push({
+        date: element,
+        children: newCompletedChild,
         display: false
       })
     });
@@ -47,7 +54,7 @@ export class AppComponent {
     const newTask: Task = {
       display: false,
       inputDisplay: false,
-      editBtnDisplay: false,
+      editBtnDisplay: false, 
       title: '',
       detail: '',
       date: new Date(),
@@ -58,20 +65,20 @@ export class AppComponent {
     newTask.date = TaskForm.controls['date'].value;
 
     this.apiServices.addTask(newTask).subscribe(()=>{console.log('Task has been Added!')})
-    // const matchingTask = this.ActiveTasks.find(
-    //   (element) => element.date === newTask.date
-    // );
+    const matchingTask = this.ActiveTasks.find(
+      (element) => element.date === newTask.date
+    );
 
-    // if (matchingTask) {
-    //   matchingTask.children?.push(newTask);
-    // } else {
-    //   const newTaskArrayObj: TasksArray = {
-    //     display: false,
-    //     date: newTask.date,
-    //     children: [newTask],
-    //   };
-    //   this.ActiveTasks.push(newTaskArrayObj);
-    // }
+    if (matchingTask) {
+      matchingTask.children?.push(newTask);
+    } else {
+      const newTaskArrayObj: TasksArray = {
+        display: false,
+        date: newTask.date,
+        children: [newTask],
+      };
+      this.ActiveTasks.push(newTaskArrayObj);
+    }
     // this.toastr.info('Task has been Added!');
     // const time = TaskForm.controls['time'].value*60*60*1000
     // setTimeout(() => {
@@ -84,9 +91,9 @@ export class AppComponent {
   }
 
   completedTask(task: Task) {
-    this.apiServices.updateStatus(task.date, this.SelectedIndex+1, task.status).subscribe(
+    this.apiServices.updateStatus(task.date, this.SelectedIndex, task.status).subscribe(
       ()=>{
-        console.log("update running!!")
+        console.log("update running!!", task.date, this.SelectedIndex, task.status)
       }
     )
     const matchingTask = this.completedTasksArray.find(
@@ -109,11 +116,14 @@ export class AppComponent {
     console.log(this.SelectedIndex, 'index------');
     for (let i = 0; i < this.ActiveTasks.length; i++) {
       if (task.date == this.ActiveTasks[i].date) {
-        this.ActiveTasks[i].children?.splice(this.SelectedIndex, 1);
-        console.log(this.ActiveTasks[i].children, 'rempved');
+        const updatedArray = this.ActiveTasks[i].children?.filter(item => item.taskID != this.SelectedIndex)
+        this.ActiveTasks[i].children = updatedArray
+        // this.ActiveTasks[i].children?.splice(this.SelectedIndex, 1);
         break;
       }
     }
+    console.log(this.ActiveTasks, 'rempved');
+
   }
 
   updateTask(task: Task) {

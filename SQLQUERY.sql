@@ -77,7 +77,7 @@ BEGIN
 	WHERE date = @date AND taskID = @taskID
 END
 
-EXECUTE UpdateStatus '2023-08-17', 1, false
+EXECUTE UpdateStatus '2023-08-17', 1, true
 
 select * from TaskTable
 

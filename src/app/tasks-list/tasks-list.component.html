@@ -52,7 +52,7 @@
               <input
                 type="checkbox"
                 value=""
-                (change)="CheckedTask(task, i)"
+                (change)="CheckedTask(task, task.taskID)"
                 [checked]="task.status"
                 *ngIf="!task.status"
               />
