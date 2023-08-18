@@ -64,21 +64,25 @@ export class AppComponent {
     newTask.detail = TaskForm.controls['detail'].value;
     newTask.date = TaskForm.controls['date'].value;
 
-    this.apiServices.addTask(newTask).subscribe(()=>{console.log('Task has been Added!')})
-    const matchingTask = this.ActiveTasks.find(
-      (element) => element.date === newTask.date
-    );
+    this.apiServices.addTask(newTask).subscribe(()=>{this.apiServices.getTasks().subscribe(
+      (response)=>{
+         this.getAllTasks(response) 
+        }
+      )})
+    // const matchingTask = this.ActiveTasks.find(
+    //   (element) => element.date === newTask.date
+    // );
 
-    if (matchingTask) {
-      matchingTask.children?.push(newTask);
-    } else {
-      const newTaskArrayObj: TasksArray = {
-        display: false,
-        date: newTask.date,
-        children: [newTask],
-      };
-      this.ActiveTasks.push(newTaskArrayObj);
-    }
+    // if (matchingTask) {
+    //   matchingTask.children?.push(newTask);
+    // } else {
+    //   const newTaskArrayObj: TasksArray = {
+    //     display: false,
+    //     date: newTask.date,
+    //     children: [newTask],
+    //   };
+    //   this.ActiveTasks.push(newTaskArrayObj);
+    // }
     // this.toastr.info('Task has been Added!');
     // const time = TaskForm.controls['time'].value*60*60*1000
     // setTimeout(() => {
@@ -93,23 +97,27 @@ export class AppComponent {
   completedTask(task: Task) {
     this.apiServices.updateStatus(task.date, this.SelectedIndex, task.status).subscribe(
       ()=>{
-        console.log("update running!!", task.date, this.SelectedIndex, task.status)
+        this.apiServices.getTasks().subscribe(
+          (response)=>{
+             this.getAllTasks(response) 
+            }
+          )
       }
     )
-    const matchingTask = this.completedTasksArray.find(
-      (element) => element.date === task.date
-    );
-    if (matchingTask) {
-      matchingTask.children?.push(task);
-    } else {
-      const newTaskArrayObj: TasksArray = {
-        display: false,
-        date: task.date,
-        children: [task],
-      };
-      this.completedTasksArray.push(newTaskArrayObj);
-    }
-    this.RemoveTask(task);
+    // const matchingTask = this.completedTasksArray.find(
+    //   (element) => element.date === task.date
+    // );
+    // if (matchingTask) {
+    //   matchingTask.children?.push(task);
+    // } else {
+    //   const newTaskArrayObj: TasksArray = {
+    //     display: false,
+    //     date: task.date,
+    //     children: [task],
+    //   };
+    //   this.completedTasksArray.push(newTaskArrayObj);
+    // }
+    // this.RemoveTask(task);
   }
 
   RemoveTask(task: Task) {
